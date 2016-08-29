@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="js/lib/jquery-3.1.0.js" type="text/javascript"></script>
+    <script src="js/lib/long.min.js" type="text/javascript"></script>
+    <script src="js/lib/bytebuffer.min.js" type="text/javascript"></script>
+    <script src="js/lib/protobuf.min.js" type="text/javascript"></script>
+    <script src="js/config.js" type="text/javascript"></script>
+    <script src="js/main.js" type="text/jscript"></script>
+</head>
+
+<body>
+    <script>
+        $(function () {
+            var ProtoBuf = dcodeIO.ProtoBuf;
+            if (window.WebSocket) {
+                console.log('support');
+            } else {
+                console.log('not support');
+            }
+            console.log(config.url);
+            ProtoBuf.loadProtoFile("/protobuf/soap.proto", function (err, builder) {
+                console.log(err, builder);
+            });
+            var ws = new WebSocket(config.url);
+            ws.onopen = function (e) {
+                console.log('connect to websocket server', e);
+            }
+            ws.onclose = function (e) {
+                console.log('disconnected', e);
+            }
+            ws.onmessage = function (e) {
+                console.log('received: ' + e.data, e);
+            }
+            var sendMsg = function (msg) {
+                ws.send(msg);
+                console.log('send: ' + msg);
+            }
+        })
+    </script>
+</body>
+
+</html>
