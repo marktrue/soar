@@ -29,6 +29,7 @@
             var ws = new WebSocket(config.url);
             ws.onopen = function (e) {
                 console.log('connect to websocket server', e);
+                sendMsg('hello world');
             }
             ws.onclose = function (e) {
                 console.log('disconnected', e);
