@@ -17,6 +17,7 @@
     <script>
         $(function () {
             var ProtoBuf = dcodeIO.ProtoBuf;
+            var Restproto;
             if (window.WebSocket) {
                 console.log('support');
             } else {
@@ -25,24 +26,41 @@
             console.log(config.url);
             ProtoBuf.loadProtoFile("/protobuf/soap.proto", function (err, builder) {
                 console.log(err, builder);
+                Restproto = builder.build('restproto');
             });
             var ws = new WebSocket(config.url);
             ws.onopen = function (e) {
                 console.log('connect to websocket server', e);
-                sendMsg('hello world');
+                //sendMsg('hello world');
             }
             ws.onclose = function (e) {
                 console.log('disconnected', e);
             }
             ws.onmessage = function (e) {
                 console.log('received: ' + e.data, e);
+                //sendMsg('quit');
+                
             }
             var sendMsg = function (msg) {
                 ws.send(msg);
                 console.log('send: ' + msg);
             }
+            $('#submit').click(function(e){
+                var msg = new Restproto.LoginReq({
+                    'uId' : $('#usr').val(),
+                    'pwd' : $('#pwd').val()
+                });
+                sendMsg(msg.toArrayBuffer());
+            });
+            $('#end').click(function (e){
+                sendMsg('quit');
+            })
         })
     </script>
+    <input type="text" name="usr" id="usr" />
+    <input type="password" name="pwd" id="pwd" />
+    <input type="button" id="submit" value="submit" />
+    <input type="button" id="end" value="end" />
 </body>
 
 </html>
