@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package restproto;
+
+message RegReq {
+    string uId      = 1;
+    string uName    = 2;
+    string pwd      = 3;
+}
+
+message RegRsp{
+    int32 ret = 1;
+}
+
+message LoginReq{
+    string uId      = 1;
+    string pwd      = 2;
+}
+
+message uInfo {
+    string uId     = 1;
+    string name    = 2;
+    int32  age     = 3;
+    int32  gender  = 4;
+}
+
+message lCfg{
+    string sip  = 1;
+    int32 hit   = 2;
+}
+
+message LoginRsp{
+    int32  ret             = 1;
+    string token           = 2;
+    lCfg   lcfg            = 3;
+    uInfo host             = 4;
+    repeated uInfo friends = 5;
+}
+
+message LogoutReq{
+    string token   =1;
+}
+
+message LogoutRsp{
+    int32 ret      = 1;
+}
+
+message Msg{
+    message contentInfo{
+        enum msgCtType{
+            text    = 0;
+            pic     = 1;
+            audio   = 2;
+            video   = 3;
+        }
+        string msgId   = 1;
+        msgCtType mct  = 2;
+        string content = 3;
+    }
+    message  routeInfo{
+        enum routeType{
+            p2p = 0; 
+            p2g = 1; /*peer to group*/
+        }
+        routeType rt = 1;  
+        string srcId = 2;
+        string dstId = 3;
+    }
+}
+
+message KeepAliveLoginReq{
+    string token   = 1;
+    message loginInfo{
+        string cip = 1;
+    }
+}
+
+message KeepAliveLoginRsp{
+    int32 ret            = 1;
+    repeated Msg msgList = 2;
+}
+
+message MsgRsp{
+    int32  ret     = 1;
+    string ack     = 2;
+}
+
+message rpcRsp{
+
+}
+
+service RouteMsgService{
+    rpc RouteMsg(Msg) returns (rpcRsp){}
+}

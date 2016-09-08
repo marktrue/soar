@@ -2,8 +2,10 @@
 #!/usr/bin/python
 import struct,socket
 import hashlib
-import threading,random
+import threading,random,signal
+import sys
 import time
+import soap_pb2
 from base64 import b64encode, b64decode
 
 
@@ -11,11 +13,19 @@ from base64 import b64encode, b64decode
 HOST = '0.0.0.0'
 PORT = 3368
 
+global g_exit
+
 connectionlist = {}
 g_code_length = 0
 g_header_length = 0
+g_exit = False
 
-
+def exit_signal_handler(signum, frame):
+    g_exit = True
+    print ('exit signal received!')
+    sys.exit()
+    
+    
 def hex2dec(string_num):
     return str(int(string_num.upper(), 16))
 
@@ -43,6 +53,7 @@ def get_datalength(msg):
 
 def parse_data(msg):
     global g_code_length
+    
     g_code_length = ord(msg[1]) & 127
     received_length = 0;
     if g_code_length == 126:
@@ -57,48 +68,55 @@ def parse_data(msg):
         masks = msg[2:6]
         data = msg[6:]
 
-
     i = 0
     raw_str = ''
-
 
     for d in data:
         raw_str += chr(ord(d) ^ ord(masks[i%4]))
         i += 1
 
-
     print (u"总长度是：%d" % int(g_code_length))
-    return raw_str
+#    return raw_str
+    print (raw_str)
+    if raw_str == 'quit':
+        return 'quit'
+    LoginReq = soap_pb2.LoginReq()
+    LoginReq.ParseFromString(raw_str)
+    return 'uid:' + LoginReq.uId + ' pwd:' + LoginReq.pwd
 
 
-def sendMessage(message):
+def sendMessage(message, conn=None):
     global connectionlist
     
     message_utf_8 = message.encode('utf-8')
-    for connection in connectionlist.values():
-        back_str = []
-        back_str.append('\x81')
-        data_length = len(message_utf_8)
-        
-        
-        if data_length <= 125:
-            back_str.append(chr(data_length))
-        elif data_length <= 65535:
-            back_str.append(struct.pack('b', 126))
-            back_str.append(struct.pack('>h', data_length))
-        elif data_length <= (2^64-1):
-            back_str.append(struct.pack('b', 127))
-            back_str.append(struct.pack('>q', data_length))
-        else :
-                print (u'太长了')
-        msg = ''
-        for c in back_str:
-            msg += c;
-        back_str = str(msg)   + message_utf_8#.encode('utf-8')
+    back_str = []
+    back_str.append('\x81')
+    data_length = len(message_utf_8)
+    
+    if data_length <= 125:
+        back_str.append(chr(data_length))
+    elif data_length <= 65535:
+        back_str.append(struct.pack('b', 126))
+        back_str.append(struct.pack('>h', data_length))
+    elif data_length <= (2^64-1):
+        back_str.append(struct.pack('b', 127))
+        back_str.append(struct.pack('>q', data_length))
+    else:
+        print (u'太长了')
+    msg = ''
+    for c in back_str:
+        msg += c;
+    back_str = str(msg) + message_utf_8#.encode('utf-8')
+    if conn is None:
+        for connection in connectionlist.values():
+            if back_str != None and len(back_str) > 0:
+                print (back_str)
+                connection.send(back_str)
+    else:
         if back_str != None and len(back_str) > 0:
             print (back_str)
-            connection.send(back_str)
-            
+            conn.send(back_str)
+        
             
 def deleteconnection(item):
     global connectionlist
@@ -106,7 +124,8 @@ def deleteconnection(item):
 
 class WebSocket(threading.Thread):
     
-    GUID = 'd7387453-d1e2-40d7-9572-a4afce3557ce'
+    #GUID = 'd7387453-d1e2-40d7-9572-a4afce3557ce'
+    GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
     
     def __init__(self, conn, index, name, remote, path='/'):
         threading.Thread.__init__(self)
@@ -123,8 +142,10 @@ class WebSocket(threading.Thread):
         print('Socket%s Start!' % self.index)
         headers = {}
         self.handshaken = False
+        global g_code_length
+        global g_header_length
         
-        while True:
+        while not g_exit:
             if self.handshaken == False:
                 print('Socket%s Start HandShake With %s!' %(self.index, self.remote))
                 self.buffer += bytes.decode(self.conn.recv(1024))
@@ -151,13 +172,16 @@ class WebSocket(threading.Thread):
                     self.conn.send(str.encode(str(handshake)))
                     self.handshaken = True
                     print ('Socket %s Handshaken with %s success!' % (self.index, self.remote))
-                    sendMessage(u'Welcome, ' + self.name + ' !')
+                    sendMessage(u'Welcome, ' + self.name + ' !', self.conn)
                     self.buffer_utf8 = ""
                     g_code_length = 0
+                else:
+                    print ('hand shake error & connection close')
+                    deleteconnection(str(self.index))
+                    self.conn.close()
+                    break    
 
             else:
-                global g_code_length
-                global g_header_length
                 msg = self.conn.recv(128)
                 if len(msg) <= 0:
                     continue
@@ -174,14 +198,14 @@ class WebSocket(threading.Thread):
                     if msg_unicode == 'quit':
                         print (u'Socket%s Logout!' % (self.index))
                         nowTime = time.strftime('%H:%M:%S', time.localtime(time.time()))
-                        sendMessage(u'%s %s say: %s' % (nowTime, self.remote, self.name + ' Logout'))
+                        #sendMessage(u'%s %s say: %s' % (nowTime, self.remote, self.name + ' Logout'))
                         deleteconnection(str(self.index))
                         self.conn.close()
                         break #退出线程
                     else:
-                        #print (u'Socket%s Got msg:%s from %s!' % (self.index, msg_unicode, self.remote))
+                        print (u'Socket%s Got msg:%s from %s!' % (self.index, msg_unicode, self.remote))
                         nowTime = time.strftime(u'%H:%M:%S', time.localtime(time.time()))
-                        sendMessage(u'%s %s say: %s' % (nowTime, self.remote, msg_unicode))
+                        #sendMessage(u'%s %s say: %s' % (nowTime, self.remote, msg_unicode))
                     #重置buffer和bufferlength
                     self.buffer_utf8 = ""
                     self.buffer = ""
@@ -205,6 +229,7 @@ class WebSocketServer(object):
         i=0
         while True:
             connection, address = self.socket.accept()
+            connection.settimeout(60)
             
             username = address[0]
             newSocket = WebSocket(connection, i, username, address)
@@ -213,5 +238,7 @@ class WebSocketServer(object):
             i = i + 1
             
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, exit_signal_handler)
+    signal.signal(signal.SIGTERM, exit_signal_handler)
     server = WebSocketServer()
     server.begin()
