@@ -3,6 +3,7 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
+from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -19,15 +20,85 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='soap.proto',
   package='restproto',
   syntax='proto3',
-  serialized_pb=_b('\n\nsoap.proto\x12\trestproto\"1\n\x06RegReq\x12\x0b\n\x03uId\x18\x01 \x01(\t\x12\r\n\x05uName\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"\x15\n\x06RegRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\"$\n\x08LoginReq\x12\x0b\n\x03uId\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\"?\n\x05uInfo\x12\x0b\n\x03uId\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03\x61ge\x18\x03 \x01(\x05\x12\x0e\n\x06gender\x18\x04 \x01(\x05\" \n\x04lCfg\x12\x0b\n\x03sip\x18\x01 \x01(\t\x12\x0b\n\x03hit\x18\x02 \x01(\x05\"\x88\x01\n\x08LoginRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\r\n\x05token\x18\x02 \x01(\t\x12\x1d\n\x04lcfg\x18\x03 \x01(\x0b\x32\x0f.restproto.lCfg\x12\x1e\n\x04host\x18\x04 \x01(\x0b\x32\x10.restproto.uInfo\x12!\n\x07\x66riends\x18\x05 \x03(\x0b\x32\x10.restproto.uInfo\"\x1a\n\tLogoutReq\x12\r\n\x05token\x18\x01 \x01(\t\"\x18\n\tLogoutRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\"\x98\x02\n\x03Msg\x1a\x96\x01\n\x0b\x63ontentInfo\x12\r\n\x05msgId\x18\x01 \x01(\t\x12\x31\n\x03mct\x18\x02 \x01(\x0e\x32$.restproto.Msg.contentInfo.msgCtType\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\"4\n\tmsgCtType\x12\x08\n\x04text\x10\x00\x12\x07\n\x03pic\x10\x01\x12\t\n\x05\x61udio\x10\x02\x12\t\n\x05video\x10\x03\x1ax\n\trouteInfo\x12.\n\x02rt\x18\x01 \x01(\x0e\x32\".restproto.Msg.routeInfo.routeType\x12\r\n\x05srcId\x18\x02 \x01(\t\x12\r\n\x05\x64stId\x18\x03 \x01(\t\"\x1d\n\trouteType\x12\x07\n\x03p2p\x10\x00\x12\x07\n\x03p2g\x10\x01\"<\n\x11KeepAliveLoginReq\x12\r\n\x05token\x18\x01 \x01(\t\x1a\x18\n\tloginInfo\x12\x0b\n\x03\x63ip\x18\x01 \x01(\t\"A\n\x11KeepAliveLoginRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x1f\n\x07msgList\x18\x02 \x03(\x0b\x32\x0e.restproto.Msg\"\"\n\x06MsgRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0b\n\x03\x61\x63k\x18\x02 \x01(\t\"\x08\n\x06rpcRsp2B\n\x0fRouteMsgService\x12/\n\x08RouteMsg\x12\x0e.restproto.Msg\x1a\x11.restproto.rpcRsp\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\nsoap.proto\x12\trestproto\"\xe1\x03\n\x07Message\x12 \n\x04type\x18\x01 \x01(\x0e\x32\x12.restproto.MsgType\x12\x10\n\x08sequence\x18\x02 \x01(\x07\x12!\n\x06regReq\x18\x03 \x01(\x0b\x32\x11.restproto.RegReq\x12!\n\x06regRsp\x18\x04 \x01(\x0b\x32\x11.restproto.RegRsp\x12%\n\x08loginReq\x18\x05 \x01(\x0b\x32\x13.restproto.LoginReq\x12%\n\x08loginRsp\x18\x06 \x01(\x0b\x32\x13.restproto.LoginRsp\x12\'\n\tlogoutReq\x18\x07 \x01(\x0b\x32\x14.restproto.LogoutReq\x12\'\n\tlogoutRsp\x18\x08 \x01(\x0b\x32\x14.restproto.LogoutRsp\x12-\n\nsendMsgReq\x18\t \x01(\x0b\x32\x19.restproto.SendMessageReq\x12-\n\nsendMsgRsp\x18\n \x01(\x0b\x32\x19.restproto.SendMessageRsp\x12.\n\x08\x61liveReq\x18\x0b \x01(\x0b\x32\x1c.restproto.KeepAliveLoginReq\x12.\n\x08\x61liveRsp\x18\x0c \x01(\x0b\x32\x1c.restproto.KeepAliveLoginRsp\"1\n\x06RegReq\x12\x0b\n\x03uId\x18\x01 \x01(\t\x12\r\n\x05uName\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"\x15\n\x06RegRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\"$\n\x08LoginReq\x12\x0b\n\x03uId\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\"?\n\x05uInfo\x12\x0b\n\x03uId\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03\x61ge\x18\x03 \x01(\x05\x12\x0e\n\x06gender\x18\x04 \x01(\x05\" \n\x04lCfg\x12\x0b\n\x03sip\x18\x01 \x01(\t\x12\x0b\n\x03hit\x18\x02 \x01(\x05\"\x88\x01\n\x08LoginRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\r\n\x05token\x18\x02 \x01(\t\x12\x1d\n\x04lcfg\x18\x03 \x01(\x0b\x32\x0f.restproto.lCfg\x12\x1e\n\x04host\x18\x04 \x01(\x0b\x32\x10.restproto.uInfo\x12!\n\x07\x66riends\x18\x05 \x03(\x0b\x32\x10.restproto.uInfo\"\x1a\n\tLogoutReq\x12\r\n\x05token\x18\x01 \x01(\t\"\x18\n\tLogoutRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\"\xba\x02\n\x0eSendMessageReq\x1a\xa1\x01\n\x0b\x63ontentInfo\x12\r\n\x05msgId\x18\x01 \x01(\t\x12<\n\x03mct\x18\x02 \x01(\x0e\x32/.restproto.SendMessageReq.contentInfo.msgCtType\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\"4\n\tmsgCtType\x12\x08\n\x04text\x10\x00\x12\x07\n\x03pic\x10\x01\x12\t\n\x05\x61udio\x10\x02\x12\t\n\x05video\x10\x03\x1a\x83\x01\n\trouteInfo\x12\x39\n\x02rt\x18\x01 \x01(\x0e\x32-.restproto.SendMessageReq.routeInfo.routeType\x12\r\n\x05srcId\x18\x02 \x01(\t\x12\r\n\x05\x64stId\x18\x03 \x01(\t\"\x1d\n\trouteType\x12\x07\n\x03p2p\x10\x00\x12\x07\n\x03p2g\x10\x01\"*\n\x0eSendMessageRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12\x0b\n\x03\x61\x63k\x18\x02 \x01(\t\"<\n\x11KeepAliveLoginReq\x12\r\n\x05token\x18\x01 \x01(\t\x1a\x18\n\tloginInfo\x12\x0b\n\x03\x63ip\x18\x01 \x01(\t\"L\n\x11KeepAliveLoginRsp\x12\x0b\n\x03ret\x18\x01 \x01(\x05\x12*\n\x07msgList\x18\x02 \x03(\x0b\x32\x19.restproto.SendMessageReq\"\x08\n\x06rpcRsp*\xd2\x01\n\x07MsgType\x12\t\n\x05\x65None\x10\x00\x12\x0c\n\x07\x65RegReq\x10\x81 \x12\x0c\n\x07\x65RegRsp\x10\x82 \x12\x0e\n\teLoginReq\x10\x81@\x12\x0e\n\teLoginRsp\x10\x82@\x12\x0f\n\neLogoutReq\x10\x83@\x12\x0f\n\neLogoutRsp\x10\x84@\x12\x14\n\x0f\x65SendMessageReq\x10\x81`\x12\x14\n\x0f\x65SendMessageRsp\x10\x82`\x12\x18\n\x12\x65KeepAliveLoginReq\x10\x81\x80\x01\x12\x18\n\x12\x65KeepAliveLoginRsp\x10\x82\x80\x01\x32M\n\x0fRouteMsgService\x12:\n\x08RouteMsg\x12\x19.restproto.SendMessageReq\x1a\x11.restproto.rpcRsp\"\x00\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
+_MSGTYPE = _descriptor.EnumDescriptor(
+  name='MsgType',
+  full_name='restproto.MsgType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='eNone', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eRegReq', index=1, number=4097,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eRegRsp', index=2, number=4098,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eLoginReq', index=3, number=8193,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eLoginRsp', index=4, number=8194,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eLogoutReq', index=5, number=8195,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eLogoutRsp', index=6, number=8196,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eSendMessageReq', index=7, number=12289,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eSendMessageRsp', index=8, number=12290,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eKeepAliveLoginReq', index=9, number=16385,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='eKeepAliveLoginRsp', index=10, number=16386,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=1425,
+  serialized_end=1635,
+)
+_sym_db.RegisterEnumDescriptor(_MSGTYPE)
+
+MsgType = enum_type_wrapper.EnumTypeWrapper(_MSGTYPE)
+eNone = 0
+eRegReq = 4097
+eRegRsp = 4098
+eLoginReq = 8193
+eLoginRsp = 8194
+eLogoutReq = 8195
+eLogoutRsp = 8196
+eSendMessageReq = 12289
+eSendMessageRsp = 12290
+eKeepAliveLoginReq = 16385
+eKeepAliveLoginRsp = 16386
 
 
-_MSG_CONTENTINFO_MSGCTTYPE = _descriptor.EnumDescriptor(
+_SENDMESSAGEREQ_CONTENTINFO_MSGCTTYPE = _descriptor.EnumDescriptor(
   name='msgCtType',
-  full_name='restproto.Msg.contentInfo.msgCtType',
+  full_name='restproto.SendMessageReq.contentInfo.msgCtType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -50,14 +121,14 @@ _MSG_CONTENTINFO_MSGCTTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=536,
-  serialized_end=588,
+  serialized_start=1042,
+  serialized_end=1094,
 )
-_sym_db.RegisterEnumDescriptor(_MSG_CONTENTINFO_MSGCTTYPE)
+_sym_db.RegisterEnumDescriptor(_SENDMESSAGEREQ_CONTENTINFO_MSGCTTYPE)
 
-_MSG_ROUTEINFO_ROUTETYPE = _descriptor.EnumDescriptor(
+_SENDMESSAGEREQ_ROUTEINFO_ROUTETYPE = _descriptor.EnumDescriptor(
   name='routeType',
-  full_name='restproto.Msg.routeInfo.routeType',
+  full_name='restproto.SendMessageReq.routeInfo.routeType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -72,10 +143,118 @@ _MSG_ROUTEINFO_ROUTETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=681,
-  serialized_end=710,
+  serialized_start=1199,
+  serialized_end=1228,
 )
-_sym_db.RegisterEnumDescriptor(_MSG_ROUTEINFO_ROUTETYPE)
+_sym_db.RegisterEnumDescriptor(_SENDMESSAGEREQ_ROUTEINFO_ROUTETYPE)
+
+
+_MESSAGE = _descriptor.Descriptor(
+  name='Message',
+  full_name='restproto.Message',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='restproto.Message.type', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sequence', full_name='restproto.Message.sequence', index=1,
+      number=2, type=7, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='regReq', full_name='restproto.Message.regReq', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='regRsp', full_name='restproto.Message.regRsp', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='loginReq', full_name='restproto.Message.loginReq', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='loginRsp', full_name='restproto.Message.loginRsp', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='logoutReq', full_name='restproto.Message.logoutReq', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='logoutRsp', full_name='restproto.Message.logoutRsp', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sendMsgReq', full_name='restproto.Message.sendMsgReq', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sendMsgRsp', full_name='restproto.Message.sendMsgRsp', index=9,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='aliveReq', full_name='restproto.Message.aliveReq', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='aliveRsp', full_name='restproto.Message.aliveRsp', index=11,
+      number=12, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=26,
+  serialized_end=507,
+)
 
 
 _REGREQ = _descriptor.Descriptor(
@@ -118,8 +297,8 @@ _REGREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=25,
-  serialized_end=74,
+  serialized_start=509,
+  serialized_end=558,
 )
 
 
@@ -149,8 +328,8 @@ _REGRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=76,
-  serialized_end=97,
+  serialized_start=560,
+  serialized_end=581,
 )
 
 
@@ -187,8 +366,8 @@ _LOGINREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=99,
-  serialized_end=135,
+  serialized_start=583,
+  serialized_end=619,
 )
 
 
@@ -239,8 +418,8 @@ _UINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=137,
-  serialized_end=200,
+  serialized_start=621,
+  serialized_end=684,
 )
 
 
@@ -277,8 +456,8 @@ _LCFG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=202,
-  serialized_end=234,
+  serialized_start=686,
+  serialized_end=718,
 )
 
 
@@ -336,8 +515,8 @@ _LOGINRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=237,
-  serialized_end=373,
+  serialized_start=721,
+  serialized_end=857,
 )
 
 
@@ -367,8 +546,8 @@ _LOGOUTREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=375,
-  serialized_end=401,
+  serialized_start=859,
+  serialized_end=885,
 )
 
 
@@ -398,34 +577,34 @@ _LOGOUTRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=403,
-  serialized_end=427,
+  serialized_start=887,
+  serialized_end=911,
 )
 
 
-_MSG_CONTENTINFO = _descriptor.Descriptor(
+_SENDMESSAGEREQ_CONTENTINFO = _descriptor.Descriptor(
   name='contentInfo',
-  full_name='restproto.Msg.contentInfo',
+  full_name='restproto.SendMessageReq.contentInfo',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='msgId', full_name='restproto.Msg.contentInfo.msgId', index=0,
+      name='msgId', full_name='restproto.SendMessageReq.contentInfo.msgId', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='mct', full_name='restproto.Msg.contentInfo.mct', index=1,
+      name='mct', full_name='restproto.SendMessageReq.contentInfo.mct', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='content', full_name='restproto.Msg.contentInfo.content', index=2,
+      name='content', full_name='restproto.SendMessageReq.contentInfo.content', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -436,7 +615,7 @@ _MSG_CONTENTINFO = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
-    _MSG_CONTENTINFO_MSGCTTYPE,
+    _SENDMESSAGEREQ_CONTENTINFO_MSGCTTYPE,
   ],
   options=None,
   is_extendable=False,
@@ -444,33 +623,33 @@ _MSG_CONTENTINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=438,
-  serialized_end=588,
+  serialized_start=933,
+  serialized_end=1094,
 )
 
-_MSG_ROUTEINFO = _descriptor.Descriptor(
+_SENDMESSAGEREQ_ROUTEINFO = _descriptor.Descriptor(
   name='routeInfo',
-  full_name='restproto.Msg.routeInfo',
+  full_name='restproto.SendMessageReq.routeInfo',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='rt', full_name='restproto.Msg.routeInfo.rt', index=0,
+      name='rt', full_name='restproto.SendMessageReq.routeInfo.rt', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='srcId', full_name='restproto.Msg.routeInfo.srcId', index=1,
+      name='srcId', full_name='restproto.SendMessageReq.routeInfo.srcId', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='dstId', full_name='restproto.Msg.routeInfo.dstId', index=2,
+      name='dstId', full_name='restproto.SendMessageReq.routeInfo.dstId', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -481,7 +660,7 @@ _MSG_ROUTEINFO = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
-    _MSG_ROUTEINFO_ROUTETYPE,
+    _SENDMESSAGEREQ_ROUTEINFO_ROUTETYPE,
   ],
   options=None,
   is_extendable=False,
@@ -489,13 +668,13 @@ _MSG_ROUTEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=590,
-  serialized_end=710,
+  serialized_start=1097,
+  serialized_end=1228,
 )
 
-_MSG = _descriptor.Descriptor(
-  name='Msg',
-  full_name='restproto.Msg',
+_SENDMESSAGEREQ = _descriptor.Descriptor(
+  name='SendMessageReq',
+  full_name='restproto.SendMessageReq',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -503,7 +682,7 @@ _MSG = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_MSG_CONTENTINFO, _MSG_ROUTEINFO, ],
+  nested_types=[_SENDMESSAGEREQ_CONTENTINFO, _SENDMESSAGEREQ_ROUTEINFO, ],
   enum_types=[
   ],
   options=None,
@@ -512,8 +691,46 @@ _MSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=430,
-  serialized_end=710,
+  serialized_start=914,
+  serialized_end=1228,
+)
+
+
+_SENDMESSAGERSP = _descriptor.Descriptor(
+  name='SendMessageRsp',
+  full_name='restproto.SendMessageRsp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ret', full_name='restproto.SendMessageRsp.ret', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='ack', full_name='restproto.SendMessageRsp.ack', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1230,
+  serialized_end=1272,
 )
 
 
@@ -543,8 +760,8 @@ _KEEPALIVELOGINREQ_LOGININFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=748,
-  serialized_end=772,
+  serialized_start=1310,
+  serialized_end=1334,
 )
 
 _KEEPALIVELOGINREQ = _descriptor.Descriptor(
@@ -573,8 +790,8 @@ _KEEPALIVELOGINREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=712,
-  serialized_end=772,
+  serialized_start=1274,
+  serialized_end=1334,
 )
 
 
@@ -611,46 +828,8 @@ _KEEPALIVELOGINRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=774,
-  serialized_end=839,
-)
-
-
-_MSGRSP = _descriptor.Descriptor(
-  name='MsgRsp',
-  full_name='restproto.MsgRsp',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='ret', full_name='restproto.MsgRsp.ret', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='ack', full_name='restproto.MsgRsp.ack', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=841,
-  serialized_end=875,
+  serialized_start=1336,
+  serialized_end=1412,
 )
 
 
@@ -673,21 +852,33 @@ _RPCRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=877,
-  serialized_end=885,
+  serialized_start=1414,
+  serialized_end=1422,
 )
 
+_MESSAGE.fields_by_name['type'].enum_type = _MSGTYPE
+_MESSAGE.fields_by_name['regReq'].message_type = _REGREQ
+_MESSAGE.fields_by_name['regRsp'].message_type = _REGRSP
+_MESSAGE.fields_by_name['loginReq'].message_type = _LOGINREQ
+_MESSAGE.fields_by_name['loginRsp'].message_type = _LOGINRSP
+_MESSAGE.fields_by_name['logoutReq'].message_type = _LOGOUTREQ
+_MESSAGE.fields_by_name['logoutRsp'].message_type = _LOGOUTRSP
+_MESSAGE.fields_by_name['sendMsgReq'].message_type = _SENDMESSAGEREQ
+_MESSAGE.fields_by_name['sendMsgRsp'].message_type = _SENDMESSAGERSP
+_MESSAGE.fields_by_name['aliveReq'].message_type = _KEEPALIVELOGINREQ
+_MESSAGE.fields_by_name['aliveRsp'].message_type = _KEEPALIVELOGINRSP
 _LOGINRSP.fields_by_name['lcfg'].message_type = _LCFG
 _LOGINRSP.fields_by_name['host'].message_type = _UINFO
 _LOGINRSP.fields_by_name['friends'].message_type = _UINFO
-_MSG_CONTENTINFO.fields_by_name['mct'].enum_type = _MSG_CONTENTINFO_MSGCTTYPE
-_MSG_CONTENTINFO.containing_type = _MSG
-_MSG_CONTENTINFO_MSGCTTYPE.containing_type = _MSG_CONTENTINFO
-_MSG_ROUTEINFO.fields_by_name['rt'].enum_type = _MSG_ROUTEINFO_ROUTETYPE
-_MSG_ROUTEINFO.containing_type = _MSG
-_MSG_ROUTEINFO_ROUTETYPE.containing_type = _MSG_ROUTEINFO
+_SENDMESSAGEREQ_CONTENTINFO.fields_by_name['mct'].enum_type = _SENDMESSAGEREQ_CONTENTINFO_MSGCTTYPE
+_SENDMESSAGEREQ_CONTENTINFO.containing_type = _SENDMESSAGEREQ
+_SENDMESSAGEREQ_CONTENTINFO_MSGCTTYPE.containing_type = _SENDMESSAGEREQ_CONTENTINFO
+_SENDMESSAGEREQ_ROUTEINFO.fields_by_name['rt'].enum_type = _SENDMESSAGEREQ_ROUTEINFO_ROUTETYPE
+_SENDMESSAGEREQ_ROUTEINFO.containing_type = _SENDMESSAGEREQ
+_SENDMESSAGEREQ_ROUTEINFO_ROUTETYPE.containing_type = _SENDMESSAGEREQ_ROUTEINFO
 _KEEPALIVELOGINREQ_LOGININFO.containing_type = _KEEPALIVELOGINREQ
-_KEEPALIVELOGINRSP.fields_by_name['msgList'].message_type = _MSG
+_KEEPALIVELOGINRSP.fields_by_name['msgList'].message_type = _SENDMESSAGEREQ
+DESCRIPTOR.message_types_by_name['Message'] = _MESSAGE
 DESCRIPTOR.message_types_by_name['RegReq'] = _REGREQ
 DESCRIPTOR.message_types_by_name['RegRsp'] = _REGRSP
 DESCRIPTOR.message_types_by_name['LoginReq'] = _LOGINREQ
@@ -696,11 +887,19 @@ DESCRIPTOR.message_types_by_name['lCfg'] = _LCFG
 DESCRIPTOR.message_types_by_name['LoginRsp'] = _LOGINRSP
 DESCRIPTOR.message_types_by_name['LogoutReq'] = _LOGOUTREQ
 DESCRIPTOR.message_types_by_name['LogoutRsp'] = _LOGOUTRSP
-DESCRIPTOR.message_types_by_name['Msg'] = _MSG
+DESCRIPTOR.message_types_by_name['SendMessageReq'] = _SENDMESSAGEREQ
+DESCRIPTOR.message_types_by_name['SendMessageRsp'] = _SENDMESSAGERSP
 DESCRIPTOR.message_types_by_name['KeepAliveLoginReq'] = _KEEPALIVELOGINREQ
 DESCRIPTOR.message_types_by_name['KeepAliveLoginRsp'] = _KEEPALIVELOGINRSP
-DESCRIPTOR.message_types_by_name['MsgRsp'] = _MSGRSP
 DESCRIPTOR.message_types_by_name['rpcRsp'] = _RPCRSP
+DESCRIPTOR.enum_types_by_name['MsgType'] = _MSGTYPE
+
+Message = _reflection.GeneratedProtocolMessageType('Message', (_message.Message,), dict(
+  DESCRIPTOR = _MESSAGE,
+  __module__ = 'soap_pb2'
+  # @@protoc_insertion_point(class_scope:restproto.Message)
+  ))
+_sym_db.RegisterMessage(Message)
 
 RegReq = _reflection.GeneratedProtocolMessageType('RegReq', (_message.Message,), dict(
   DESCRIPTOR = _REGREQ,
@@ -758,28 +957,35 @@ LogoutRsp = _reflection.GeneratedProtocolMessageType('LogoutRsp', (_message.Mess
   ))
 _sym_db.RegisterMessage(LogoutRsp)
 
-Msg = _reflection.GeneratedProtocolMessageType('Msg', (_message.Message,), dict(
+SendMessageReq = _reflection.GeneratedProtocolMessageType('SendMessageReq', (_message.Message,), dict(
 
   contentInfo = _reflection.GeneratedProtocolMessageType('contentInfo', (_message.Message,), dict(
-    DESCRIPTOR = _MSG_CONTENTINFO,
+    DESCRIPTOR = _SENDMESSAGEREQ_CONTENTINFO,
     __module__ = 'soap_pb2'
-    # @@protoc_insertion_point(class_scope:restproto.Msg.contentInfo)
+    # @@protoc_insertion_point(class_scope:restproto.SendMessageReq.contentInfo)
     ))
   ,
 
   routeInfo = _reflection.GeneratedProtocolMessageType('routeInfo', (_message.Message,), dict(
-    DESCRIPTOR = _MSG_ROUTEINFO,
+    DESCRIPTOR = _SENDMESSAGEREQ_ROUTEINFO,
     __module__ = 'soap_pb2'
-    # @@protoc_insertion_point(class_scope:restproto.Msg.routeInfo)
+    # @@protoc_insertion_point(class_scope:restproto.SendMessageReq.routeInfo)
     ))
   ,
-  DESCRIPTOR = _MSG,
+  DESCRIPTOR = _SENDMESSAGEREQ,
   __module__ = 'soap_pb2'
-  # @@protoc_insertion_point(class_scope:restproto.Msg)
+  # @@protoc_insertion_point(class_scope:restproto.SendMessageReq)
   ))
-_sym_db.RegisterMessage(Msg)
-_sym_db.RegisterMessage(Msg.contentInfo)
-_sym_db.RegisterMessage(Msg.routeInfo)
+_sym_db.RegisterMessage(SendMessageReq)
+_sym_db.RegisterMessage(SendMessageReq.contentInfo)
+_sym_db.RegisterMessage(SendMessageReq.routeInfo)
+
+SendMessageRsp = _reflection.GeneratedProtocolMessageType('SendMessageRsp', (_message.Message,), dict(
+  DESCRIPTOR = _SENDMESSAGERSP,
+  __module__ = 'soap_pb2'
+  # @@protoc_insertion_point(class_scope:restproto.SendMessageRsp)
+  ))
+_sym_db.RegisterMessage(SendMessageRsp)
 
 KeepAliveLoginReq = _reflection.GeneratedProtocolMessageType('KeepAliveLoginReq', (_message.Message,), dict(
 
@@ -802,13 +1008,6 @@ KeepAliveLoginRsp = _reflection.GeneratedProtocolMessageType('KeepAliveLoginRsp'
   # @@protoc_insertion_point(class_scope:restproto.KeepAliveLoginRsp)
   ))
 _sym_db.RegisterMessage(KeepAliveLoginRsp)
-
-MsgRsp = _reflection.GeneratedProtocolMessageType('MsgRsp', (_message.Message,), dict(
-  DESCRIPTOR = _MSGRSP,
-  __module__ = 'soap_pb2'
-  # @@protoc_insertion_point(class_scope:restproto.MsgRsp)
-  ))
-_sym_db.RegisterMessage(MsgRsp)
 
 rpcRsp = _reflection.GeneratedProtocolMessageType('rpcRsp', (_message.Message,), dict(
   DESCRIPTOR = _RPCRSP,

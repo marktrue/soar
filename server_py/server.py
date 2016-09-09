@@ -80,9 +80,10 @@ def parse_data(msg):
     print (raw_str)
     if raw_str == 'quit':
         return 'quit'
-    LoginReq = soap_pb2.LoginReq()
-    LoginReq.ParseFromString(raw_str)
-    return 'uid:' + LoginReq.uId + ' pwd:' + LoginReq.pwd
+    Message = soap_pb2.Message()
+    Message.ParseFromString(raw_str)
+    print ('loginReq:' + str(Message.type == soap_pb2.eLoginReq))
+    return 'uid:' + Message.loginReq.uId + ' pwd:' + Message.loginReq.pwd
 
 
 def sendMessage(message, conn=None):

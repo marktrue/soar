@@ -38,17 +38,19 @@
             }
             ws.onmessage = function (e) {
                 console.log('received: ' + e.data, e);
-                //sendMsg('quit');
-                
+                $('#msg').val(e.data);
             }
             var sendMsg = function (msg) {
                 ws.send(msg);
                 console.log('send: ' + msg);
             }
             $('#submit').click(function(e){
-                var msg = new Restproto.LoginReq({
-                    'uId' : $('#usr').val(),
-                    'pwd' : $('#pwd').val()
+                var msg = new Restproto.Message({
+                    type : Restproto.MsgType.eLoginReq,
+                    loginReq : {
+                        uId : $('#usr').val(),
+                        pwd : $('#pwd').val()
+                    }
                 });
                 sendMsg(msg.toArrayBuffer());
             });
@@ -61,6 +63,8 @@
     <input type="password" name="pwd" id="pwd" />
     <input type="button" id="submit" value="submit" />
     <input type="button" id="end" value="end" />
+    <br/>
+    <input type="text" readonly id="msg" />
 </body>
 
 </html>
